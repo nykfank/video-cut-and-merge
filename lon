@@ -1,2 +1,13 @@
-#!/bin/sh
-echo $1 >>long.txt
+#!/bin/bash
+
+num=$2
+
+if [ $# -eq 1 ]; then
+   num=1 
+fi
+
+for (( c=1; c<=$num; c++ ))
+do
+	echo $1 >>long.txt
+done
+

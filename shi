@@ -1,2 +1,12 @@
-#!/bin/sh
-echo $1 >>shift.txt
+#!/bin/bash
+
+num=$2
+
+if [ $# -eq 1 ]; then
+   num=1 
+fi
+
+for (( c=1; c<=$num; c++ ))
+do
+	echo $1 >>shift.txt
+done

@@ -60,7 +60,7 @@ for (f in filme) {
 		cmd <- sprintf("ffmpeg -hide_banner -loglevel panic -y -ss %d -i %s -t %d -vf scale=%s -codec:a aac -b:a 128k -ar %d -af aresample=async=1000 -codec:v libx264 -crf 20 -profile:v main -r %d -avoid_negative_ts make_zero -fflags +genpts %s", 
 			start, f, dauer, top_resolution, top_sampling_rate, top_fps, outfile)
 	} else {
-		cmd <- sprintf("ffmpeg -hide_banner -y -ss %d -i %s -t %d -c copy -r 30 -avoid_negative_ts make_zero -fflags +genpts %s", start, f, dauer, outfile)	
+		cmd <- sprintf("ffmpeg -hide_banner -y -ss %d -i %s -t %d -c copy %s", start, f, dauer, outfile)	
 	}
 	system(cmd)
 }
@@ -69,6 +69,6 @@ for (f in filme) {
 mergefiles <- sprintf("file '%s/cut/%s'", getwd(), filme)
 tempTextFile <- sprintf("/tmp/vidfiles%d.txt", as.integer(Sys.time()))
 write(mergefiles, file=tempTextFile)
-cmd <- sprintf('ffmpeg -hide_banner -y -f concat -safe 0 -i %s -c copy %s', tempTextFile, merged_filename)
+cmd <- sprintf('ffmpeg -hide_banner -loglevel panic -y -f concat -safe 0 -i %s -c copy %s', tempTextFile, merged_filename)
 writeLines(cmd)
 system(cmd)

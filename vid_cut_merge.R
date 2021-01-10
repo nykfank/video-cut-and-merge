@@ -3,7 +3,7 @@ nb_seconds <- 5
 
 merged_filename <- sprintf("jahresfilm_%s.mp4", gsub("[^0-9]", "", getwd()))
 if (file.exists(merged_filename)) unlink(merged_filename)
-filme <- list.files(".", pattern="mp4")
+filme <- sort(list.files(".", pattern="mp4"))
 
 # Determine video resolutionution and FPS
 fps <- c()
@@ -42,7 +42,7 @@ for (f in filme) {
 	dauer <- nb_seconds + sum(f == lange) * nb_seconds
 	writeLines(sprintf("%d/%d: %s %d to %d seconds", which(f == filme), length(filme), f, start, start+dauer))
 	if (re_encoding == TRUE) {
-		cmd <- sprintf("ffmpeg -hide_banner -loglevel panic -y -ss %d -i %s -t %d -vf scale=%s -codec:v libx264 -crf 18 -profile:v main -r %d %s", start, f, dauer, top_resolution, top_fps, outfile)
+		cmd <- sprintf("ffmpeg -hide_banner -loglevel panic -y -ss %d -i %s -t %d -vf scale=%s -codec:a aac -codec:v libx264 -crf 18 -profile:v main -r %d %s", start, f, dauer, top_resolution, top_fps, outfile)
 	} else {
 		cmd <- sprintf("ffmpeg -hide_banner -y -ss %d -i %s -t %d -c copy -r 30 %s", start, f, dauer, outfile)	
 	}

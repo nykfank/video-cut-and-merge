@@ -3,7 +3,7 @@ nb_seconds <- 5
 
 merged_filename <- sprintf("jahresfilm_%s.mp4", gsub("[^0-9]", "", getwd()))
 if (file.exists(merged_filename)) unlink(merged_filename)
-filme <- sort(list.files(".", pattern="mp4"))
+filme <- sort(list.files(".", pattern="mp4|ogg"))
 
 # Determine video resolutionution and FPS
 fps <- c()
@@ -51,7 +51,7 @@ if (!dir.exists("cut")) dir.create("cut")
 
 # Extract part from videos
 for (f in filme) {
-	outfile <- sprintf("cut/%s", f)
+	outfile <- sprintf("cut/%s", gsub("ogg", "mp4", f))
 	if (file.exists(outfile)) next
 	start <- sum(f == shift, na.rm=TRUE) * nb_seconds
 	dauer <- nb_seconds + sum(f == lange, na.rm=TRUE) * nb_seconds
@@ -66,7 +66,7 @@ for (f in filme) {
 }
 
 # Merge parts of videoss
-mergefiles <- sprintf("file '%s/cut/%s'", getwd(), filme)
+mergefiles <- sprintf("file '%s/cut/%s'", getwd(), gsub("ogg", "mp4", filme))
 tempTextFile <- sprintf("/tmp/vidfiles%d.txt", as.integer(Sys.time()))
 write(mergefiles, file=tempTextFile)
 cmd <- sprintf('ffmpeg -hide_banner -loglevel panic -y -f concat -safe 0 -i %s -c copy %s', tempTextFile, merged_filename)

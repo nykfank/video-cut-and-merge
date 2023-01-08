@@ -57,7 +57,8 @@ for (f in filme) {
 	dauer <- nb_seconds + sum(f == lange, na.rm=TRUE) * nb_seconds
 	writeLines(sprintf("%d/%d: %s %d to %d seconds", which(f == filme), length(filme), f, start, start+dauer))
 	if (re_encoding == TRUE) {
-		cmd <- sprintf("ffmpeg -hide_banner -loglevel panic -y -ss %d -i %s -t %d -vf scale=%s -codec:a aac -b:a 128k -ar %d -af aresample=async=1000 -codec:v libx264 -crf 20 -profile:v baseline -pix_fmt yuv420p -r %d -avoid_negative_ts make_zero -fflags +genpts %s", 
+		# crf was 20, then 23 (default), now 24
+		cmd <- sprintf("ffmpeg -hide_banner -loglevel panic -y -ss %d -i %s -t %d -vf scale=%s -codec:a aac -b:a 128k -ar %d -af aresample=async=1000 -codec:v libx264 -crf 24 -profile:v baseline -pix_fmt yuv420p -r %d -avoid_negative_ts make_zero -fflags +genpts %s", 
 			start, f, dauer, top_resolution, top_sampling_rate, top_fps, outfile)
 	} else {
 		cmd <- sprintf("ffmpeg -hide_banner -y -ss %d -i %s -t %d -c copy %s", start, f, dauer, outfile)	
